@@ -1,19 +1,33 @@
 services:
-  prometheus:
-    image: prom/prometheus:v2.35.0
+ serviceA:
+   image: pietrzyckagata/servicea-local:latest
+   pull_policy: always
+   environment:
+     - SPRING_PROFILES_ACTIVE=docker
+
+ serviceB:
+   image: pietrzyckagata/serviceb-local:latest
+   pull_policy: always
+   environment:
+     - SPRING_PROFILES_ACTIVE=docker
+
+ prometheus:
+    image: prom/prometheus:v2.37.1
     ports:
       - "9090:9090"
-    container_name: prometheusA
+    container_name: prometheus
     restart: unless-stopped
     volumes:
       - ./data/prometheus/config:/etc/prometheus/
     command:
       - '--config.file=/etc/prometheus/prometheus.yaml'
+    depends_on:
+      - serviceA
+      - serviceB
 
-
-  grafana:
+ grafana:
     image: grafana/grafana-oss:8.5.2
-    container_name: grafanaA
+    container_name: grafana
     restart: unless-stopped
     user: root
     ports:
