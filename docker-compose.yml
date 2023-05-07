@@ -2,12 +2,16 @@ services:
  serviceA:
    image: pietrzyckagata/servicea-local:latest
    pull_policy: always
+   ports:
+     - "8082:8080"
    environment:
      - SPRING_PROFILES_ACTIVE=docker
 
  serviceB:
    image: pietrzyckagata/serviceb-local:latest
    pull_policy: always
+   ports:
+     - "8081:8080"
    environment:
      - SPRING_PROFILES_ACTIVE=docker
 
