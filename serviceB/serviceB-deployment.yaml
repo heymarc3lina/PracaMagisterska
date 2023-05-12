@@ -15,7 +15,7 @@ spec:
         app: service-b
     spec:
       containers:
-        - name: service-a
+        - name: service-b
           image: pietrzyckagata/serviceb-local:latest
           ports:
             - containerPort: 8080
