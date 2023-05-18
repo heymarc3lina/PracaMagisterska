@@ -46,9 +46,9 @@ public class ServiceBService {
             throw new RuntimeException(e);
         }
     }
-    public List<String>  calculateAndGive10RandomSHA(){
+    public List<String>  calculateAndGive10RandomSHA(int loopQuantity){
         List<String > shaList = new ArrayList<>();
-        for(int i =0 ; i< 420000; i++){
+        for(int i =0 ; i< loopQuantity; i++){
             String sha256hex = encryptThisString(generatePasswordToCrypt());
             shaList.add(sha256hex);
         }

@@ -16,9 +16,4 @@ public class MessageConfig {
     public Queue queueServiceB(){
         return new Queue("serviceB");
     }
-
-    @Bean
-    public Queue queue(){
-        return new Queue("dupa");
-    }
 }

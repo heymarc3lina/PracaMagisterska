@@ -1,6 +1,7 @@
-package com.agata.pietrzycka.servicea.services;
+package com.agata.pietrzycka.services;
 
 import org.springframework.stereotype.Service;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,9 +24,8 @@ public class ServiceAService {
                     (random.nextFloat() * (rightLimit - leftLimit + 1));
             buffer.append((char) randomLimitedInt);
         }
-        String generatedString = buffer.toString();
+       return buffer.toString();
 
-        return generatedString;
     }
     private static String encryptThisString(String input) {
         try {
@@ -43,10 +43,9 @@ public class ServiceAService {
             throw new RuntimeException(e);
         }
     }
-
-    public List<String>  calculateAndGive10RandomSHA(int loopQuantity){
+    public List<String>  calculateAndGive10RandomSHA(int loopNumber){
         List<String > shaList = new ArrayList<>();
-        for(int i =0 ; i<  loopQuantity; i++){
+        for(int i =0 ; i< loopNumber; i++){
             String sha256hex = encryptThisString(generatePasswordToCrypt());
             shaList.add(sha256hex);
         }
