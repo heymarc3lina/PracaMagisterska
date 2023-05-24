@@ -8,18 +8,24 @@ services:
   serviceA:
     image: pietrzyckagata/rabbitmq-servicea:latest
     pull_policy: always
+    ports:
+      - "8084:80"
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on: #define dependencies of this app
       - rabbitmq
+      - producer
 
   serviceB:
     image: pietrzyckagata/rabbitmq-serviceb:latest
     pull_policy: always
+    ports:
+      - "8085:80"
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on: #define dependencies of this app
       - rabbitmq
+      - producer
 
   producer:
     image: pietrzyckagata/rabbitmq-producer:latest
@@ -30,3 +36,37 @@ services:
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on: #define dependencies of this app
       - rabbitmq
+
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    ports:
+      - "9090:9090"
+    container_name: prometheus
+    hostname: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./data/prometheus/config:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+    depends_on:
+      - serviceA
+      - serviceB
+
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    container_name: grafana
+    restart: unless-stopped
+    user: root
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+  #      - GF_USERS_ALLOW_SIGN_UP=false
+  #      - GF_SERVER_DOMAIN=localhost
+  #      - GF_LOG_MODE=console file
+  #      - GF_LOG_FILTERS=alerting.notifier.slack:debug alertmanager:debug ngalert:debug
