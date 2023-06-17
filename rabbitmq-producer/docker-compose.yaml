@@ -8,8 +8,10 @@ services:
   serviceA:
     image: pietrzyckagata/rabbitmq-servicea:latest
     pull_policy: always
-    ports:
-      - "8084:80"
+    deploy:
+      replicas: 3
+#    ports:
+#      - "8084:8084"
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on: #define dependencies of this app
@@ -19,8 +21,10 @@ services:
   serviceB:
     image: pietrzyckagata/rabbitmq-serviceb:latest
     pull_policy: always
-    ports:
-      - "8085:80"
+    deploy:
+      replicas: 3
+#    ports:
+#      - "8085:8085"
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on: #define dependencies of this app
