@@ -17,12 +17,12 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: [ 'serviceB:8085' ]
-        labels:
-          application: 'ServiceB Application'
+#        labels:
+#          application: 'ServiceB Application'
     relabel_configs:
       - source_labels: [ __address__ ]
         target_label: instance
-        regex: 'serviceA:(\d+)'
+        regex: 'serviceB:(\d+)'
         replacement: '${1}'
 
   - job_name: 'producer_service'
