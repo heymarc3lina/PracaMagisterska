@@ -31,3 +31,9 @@ scrape_configs:
       - targets: [ 'producer:8083' ]
         labels:
           application: 'producer Application'
+
+  - job_name: 'rabbitmq'
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'rabbitmq:15692' ]
