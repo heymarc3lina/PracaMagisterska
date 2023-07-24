@@ -1,6 +1,5 @@
 package com.example.loadmanagementservice;
 
-import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,8 +14,10 @@ public class LoadManagementServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LoadManagementServiceApplication.class, args);
+        int newNumber = 7;
         while(true){
-            decisionService.shouldCreateInstance();
+            decisionService.shouldCreateInstance(newNumber);
+            newNumber++;
         }
     }
 

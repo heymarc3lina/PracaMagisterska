@@ -31,7 +31,17 @@
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
-            <version>3.2.1</version>
+            <version>3.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.1.4</version> <!-- Sprawdź najnowszą wersję na stronie Apache HttpClient -->
+        </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java-transport-httpclient5</artifactId>
+            <version>3.3.2</version> <!-- Sprawdź najnowszą wersję na stronie GitHub projektu -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
