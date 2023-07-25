@@ -14,10 +14,8 @@ public class LoadManagementServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LoadManagementServiceApplication.class, args);
-        int newNumber = 7;
         while(true){
-            decisionService.shouldCreateInstance(newNumber);
-            newNumber++;
+            decisionService.shouldCreateInstance();
         }
     }
 
