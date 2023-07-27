@@ -10,7 +10,7 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-        regex: 'serviceA:(\d+)'
+        regex: 'serviceA-(\d+)'
         replacement: '${1}'
 
   - job_name: 'serviceB_service'
@@ -22,7 +22,7 @@ scrape_configs:
     relabel_configs:
       - source_labels: [ __address__ ]
         target_label: instance
-        regex: 'serviceB:(\d+)'
+        regex: 'serviceB-(\d+)'
         replacement: '${1}'
 
   - job_name: 'producer_service'
