@@ -30,26 +30,26 @@ public class DockerClientService {
             .build();
     private final DockerClient client = DockerClientImpl.getInstance(config, httpClient);
 
-    public void killInstance() {
-        Optional<Container> serviceAImage = client.listContainersCmd().exec().stream().filter(e -> e.getImage().contains(IMAGE_A_NAME)).findFirst();
-        serviceAImage.ifPresent(container -> client.killContainerCmd(container.getId()).exec());
+    public void killInstance(String imageName) {
+        Optional<Container> serviceImage = client.listContainersCmd().exec().stream().filter(e -> e.getImage().contains(imageName)).findFirst();
+        serviceImage.ifPresent(container -> client.killContainerCmd(container.getId()).exec());
     }
 
-    public boolean canServiceAKill() {
-        List<Container> serviceAImages = client.listContainersCmd().exec().stream().filter(e -> e.getImage().contains(IMAGE_A_NAME)).toList();
+    public boolean canServiceKill(String imageName) {
+        List<Container> serviceAImages = client.listContainersCmd().exec().stream().filter(e -> e.getImage().contains(imageName)).toList();
         return serviceAImages.size() > 1;
     }
 
-    public void createInstance(int newNumber) {
-        String newNames = SERVICE_B_NAME + "-" + newNumber;
-        Optional<Container> serviceBImage = client.listContainersCmd().exec().stream().filter(e -> e.getImage().contains(IMAGE_B_NAME)).findFirst();
-        if (serviceBImage.isPresent()) {
-            InspectContainerResponse existingContainer = client.inspectContainerCmd(serviceBImage.get().getId()).exec();
+    public void createInstance(int newNumber, String serviceName, String imageName) {
+        String newNames = serviceName + "-" + newNumber;
+        Optional<Container> serviceImage = client.listContainersCmd().exec().stream().filter(e -> e.getImage().contains(imageName)).findFirst();
+        if (serviceImage.isPresent()) {
+            InspectContainerResponse existingContainer = client.inspectContainerCmd(serviceImage.get().getId()).exec();
 
-            String newContainerId = client.createContainerCmd(serviceBImage.get().getImage())
+            String newContainerId = client.createContainerCmd(serviceImage.get().getImage())
                     .withHostConfig(existingContainer.getHostConfig())
                     .withName(newNames)
-                    .withLabels(serviceBImage.get().getLabels())
+                    .withLabels(serviceImage.get().getLabels())
                     .withEnv(List.of("SPRING_RABBITMQ_HOST=rabbitmq"))
                     .exec().getId();
 

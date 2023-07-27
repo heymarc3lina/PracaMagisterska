@@ -8,7 +8,12 @@ import java.util.Optional;
 public class DecisionService {
     private final PrometheusService prometheusService;
     private final DockerClientService dockerClientService;
-    int newNumber = 4;
+    int newNumberServiceB = 3;
+    int newNumberServiceA  = 3;
+    private final String SERVICE_B_NAME = "rabbitmq-producer-serviceB";
+    private final String SERVICE_A_NAME = "rabbitmq-producer-serviceA";
+    private final String IMAGE_B_NAME = "pietrzyckagata/rabbitmq-serviceb:latest";
+    private final String IMAGE_A_NAME = "pietrzyckagata/rabbitmq-servicea:latest";
 
     public DecisionService(PrometheusService prometheusService, DockerClientService dockerClientService) {
         this.prometheusService = prometheusService;
@@ -23,10 +28,17 @@ public class DecisionService {
             double timeServiceA = Double.valueOf(prometheusMetricResultServiceA.get().getValues().get(0).get(1));
             double timeServiceB = Double.valueOf(prometheusMetricResultServiceB.get().getValues().get(0).get(1));
             if(timeServiceB > timeServiceA){
-                if(dockerClientService.canServiceAKill()){
-                    newNumber++;
-                    dockerClientService.killInstance();
-                    dockerClientService.createInstance(newNumber);
+                if(dockerClientService.canServiceKill(IMAGE_A_NAME)){
+                    newNumberServiceB++;
+                    dockerClientService.killInstance(IMAGE_A_NAME);
+                    dockerClientService.createInstance(newNumberServiceB, SERVICE_B_NAME, IMAGE_B_NAME);
+                }
+            }
+            if(timeServiceB < timeServiceA){
+                if(dockerClientService.canServiceKill(IMAGE_B_NAME)){
+                    newNumberServiceA++;
+                    dockerClientService.killInstance(IMAGE_B_NAME);
+                    dockerClientService.createInstance(newNumberServiceA, SERVICE_A_NAME, IMAGE_A_NAME);
                 }
             }
         }
