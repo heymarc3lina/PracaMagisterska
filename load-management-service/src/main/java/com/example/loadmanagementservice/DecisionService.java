@@ -8,8 +8,8 @@ import java.util.Optional;
 public class DecisionService {
     private final PrometheusService prometheusService;
     private final DockerClientService dockerClientService;
-    int newNumberServiceB = 3;
-    int newNumberServiceA  = 3;
+    int newNumberServiceB = 7;
+    int newNumberServiceA  = 7;
     private final String SERVICE_B_NAME = "rabbitmq-producer-serviceB";
     private final String SERVICE_A_NAME = "rabbitmq-producer-serviceA";
     private final String IMAGE_B_NAME = "pietrzyckagata/rabbitmq-serviceb:latest";
@@ -32,6 +32,9 @@ public class DecisionService {
                     newNumberServiceB++;
                     dockerClientService.killInstance(IMAGE_A_NAME);
                     dockerClientService.createInstance(newNumberServiceB, SERVICE_B_NAME, IMAGE_B_NAME);
+                    System.out.println("ADD B");
+                } else {
+                    System.out.println("Can't kill serviceA, because there left only 1!");
                 }
             }
             if(timeServiceB < timeServiceA){
@@ -39,11 +42,12 @@ public class DecisionService {
                     newNumberServiceA++;
                     dockerClientService.killInstance(IMAGE_B_NAME);
                     dockerClientService.createInstance(newNumberServiceA, SERVICE_A_NAME, IMAGE_A_NAME);
+                    System.out.println("ADD A");
+                } else {
+                    System.out.println("Can't kill serviceB, because there left only 1!");
                 }
             }
         }
-
-
-
+        dockerClientService.cleanUp();
     }
 }

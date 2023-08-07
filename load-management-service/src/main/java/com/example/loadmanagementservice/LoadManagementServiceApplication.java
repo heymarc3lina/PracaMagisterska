@@ -14,9 +14,14 @@ public class LoadManagementServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LoadManagementServiceApplication.class, args);
-        while(true){
-            decisionService.shouldCreateInstance();
+
+        while (true) {
+            try {
+                decisionService.shouldCreateInstance();
+                Thread.sleep(10000);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
-
 }

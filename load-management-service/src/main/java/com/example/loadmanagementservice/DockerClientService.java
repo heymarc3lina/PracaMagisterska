@@ -16,10 +16,6 @@ import java.util.Optional;
 @Service
 public class DockerClientService {
 
-    private final String SERVICE_B_NAME = "rabbitmq-producer-serviceB";
-    private final String IMAGE_B_NAME = "pietrzyckagata/rabbitmq-serviceb:latest";
-    private final String IMAGE_A_NAME = "pietrzyckagata/rabbitmq-servicea:latest";
-
     private final DefaultDockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
     DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
             .dockerHost(config.getDockerHost())
@@ -55,6 +51,24 @@ public class DockerClientService {
 
             client.startContainerCmd(newContainerId).exec();
 
+        }
+    }
+
+    public void cleanUp() {
+        List<Container> containers = client.listContainersCmd().withShowAll(true).exec();
+
+        for (Container container : containers) {
+            if (!container.getState().equalsIgnoreCase("running")) {
+                String containerId = container.getId();
+
+                try {
+                    client.removeContainerCmd(containerId).withForce(true).exec();
+                    System.out.println("Delete container with ID: " + containerId);
+                } catch (Exception e) {
+                    System.err.println("Error while deleting container with ID: " + containerId);
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
