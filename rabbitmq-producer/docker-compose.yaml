@@ -1,5 +1,6 @@
 services:
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:management
     ports:
       - "5672:5672"
@@ -36,6 +37,7 @@ services:
     pull_policy: always
     ports:
       - "8083:8083"
+    container_name: producer
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on: #define dependencies of this app
